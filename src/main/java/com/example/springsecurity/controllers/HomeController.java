@@ -1,21 +1,27 @@
 package com.example.springsecurity.controllers;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
+import com.example.springsecurity.dto.UserDTO;
+import com.example.springsecurity.entities.User;
+import com.example.springsecurity.reposiroty.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 @RestController
 public class HomeController {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public HomeController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @GetMapping("/home")
     public ResponseEntity<String> home(HttpServletRequest request) {
         HttpSession session= request.getSession();
@@ -37,9 +43,14 @@ public class HomeController {
 
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
-
-    @GetMapping("/test")
-    public void test(HttpServletRequest request) {
-        System.out.println(request.getHeader("myNumber"));
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
+        User user=userRepository.findByUsername(userDTO.getUsername());
+        if (user==null){
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
+        else {
+            return ResponseEntity.ok(userRepository.saveAndFlush(new User(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()))));
+        }
     }
 }
