@@ -10,7 +10,7 @@ public class DatabaseConfig {
     @Bean
     public DataSource getDataSource(){
         DriverManagerDataSource dataSource=new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/test1");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/db_01");
         dataSource.setUsername("root");
         dataSource.setPassword("root");
         return dataSource;

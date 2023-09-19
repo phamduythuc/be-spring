@@ -3,6 +3,7 @@ package com.example.springsecurity.controllers;
 import com.example.springsecurity.dto.UserDTO;
 import com.example.springsecurity.entities.User;
 import com.example.springsecurity.reposiroty.UserRepository;
+import com.example.springsecurity.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,9 +18,12 @@ public class HomeController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public HomeController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private final UserService userService;
+
+    public HomeController(UserRepository userRepository, PasswordEncoder passwordEncoder, UserService userService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     @GetMapping("/home")
@@ -45,12 +49,6 @@ public class HomeController {
     }
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
-        User user=userRepository.findByUsername(userDTO.getUsername());
-        if (user==null){
-            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
-        }
-        else {
-            return ResponseEntity.ok(userRepository.saveAndFlush(new User(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()))));
-        }
+       return ResponseEntity.ok(userService.saveUser(userDTO));
     }
 }
