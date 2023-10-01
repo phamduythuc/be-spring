@@ -1,29 +1,32 @@
 package com.example.springsecurity.controllers;
 
 import com.example.springsecurity.dto.UserDTO;
-import com.example.springsecurity.entities.User;
 import com.example.springsecurity.reposiroty.UserRepository;
 import com.example.springsecurity.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
+@RequestMapping("/api")
 public class HomeController {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     private final UserService userService;
 
-    public HomeController(UserRepository userRepository, PasswordEncoder passwordEncoder, UserService userService) {
+    public HomeController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+    }
+
+    @PostMapping("/hello")
+    @ResponseBody
+    public String hello(){
+        return "hello";
     }
 
     @GetMapping("/home")
@@ -50,5 +53,9 @@ public class HomeController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
        return ResponseEntity.ok(userService.saveUser(userDTO));
+    }
+    @PostMapping ("/login")
+    public ResponseEntity<?> login(@RequestBody UserDTO userDTO){
+        return ResponseEntity.ok(userService.auth(userDTO));
     }
 }

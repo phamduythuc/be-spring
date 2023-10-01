@@ -12,16 +12,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User saveUser(UserDTO userDTO) {
         try {
-            if (userRepository.findByEmail(userDTO.getEmail()) == null) {
+            if (userRepository.findByEmail(userDTO.getEmail()) != null) {
                 throw new ExistEmailException();
             }
-            if (userRepository.findByUsername(userDTO.getUsername()) == null) {
+            if (userRepository.findByUsername(userDTO.getUsername()) != null) {
                 throw new ExistUsernameException();
             }
             User user = new User();
@@ -37,5 +38,9 @@ public class UserService {
             e.printStackTrace();
         }
        return null;
+    }
+
+    public String auth(UserDTO userDTO) {
+        return "Login successful";
     }
 }
