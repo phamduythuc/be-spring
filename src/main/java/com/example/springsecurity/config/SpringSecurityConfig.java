@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -21,6 +22,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -35,9 +41,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/","/login","/logout","register").permitAll();
-        http.authorizeRequests().antMatchers("/user").access("hasAnyRole('ADMIN','USER')");
-        http.authorizeRequests().antMatchers("/admin").access("hasAnyRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/","api/auth","api/register").permitAll();
+        http.authorizeRequests().antMatchers("api/user").access("hasAnyRole('ADMIN','USER')");
+        http.authorizeRequests().antMatchers("api/admin").access("hasAnyRole('ADMIN')");
         http.authorizeRequests().anyRequest().authenticated();
     }
 }

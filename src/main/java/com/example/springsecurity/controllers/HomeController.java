@@ -54,7 +54,7 @@ public class HomeController {
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
        return ResponseEntity.ok(userService.saveUser(userDTO));
     }
-    @PostMapping ("/login")
+    @PostMapping ("/auth")
     public ResponseEntity<?> login(@RequestBody UserDTO userDTO){
         return ResponseEntity.ok(userService.auth(userDTO));
     }
