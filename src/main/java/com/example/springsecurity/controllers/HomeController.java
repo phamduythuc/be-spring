@@ -23,10 +23,10 @@ public class HomeController {
         this.userService = userService;
     }
 
-    @PostMapping("/hello")
+    @GetMapping("/public")
     @ResponseBody
     public String hello(){
-        return "hello";
+        return "this content is public";
     }
 
     @GetMapping("/home")
