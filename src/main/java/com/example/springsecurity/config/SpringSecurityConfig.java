@@ -18,10 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailServiceImpl userDetailService;
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration) throws Exception {
@@ -41,7 +43,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/","api/auth","api/register").permitAll();
+        http.authorizeRequests().antMatchers("/", "api/auth", "api/register").permitAll();
         http.authorizeRequests().antMatchers("/api/public/**").permitAll();
         http.authorizeRequests().antMatchers("api/user").access("hasAnyRole('ADMIN','USER')");
         http.authorizeRequests().antMatchers("api/admin").access("hasAnyRole('ADMIN')");
