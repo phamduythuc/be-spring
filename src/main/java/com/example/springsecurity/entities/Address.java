@@ -1,6 +1,7 @@
 package com.example.springsecurity.entities;
 
 import lombok.Data;
+import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.*;
 

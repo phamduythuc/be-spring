@@ -1,40 +1,17 @@
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 
+import it.sauronsoftware.cron4j.Scheduler;
+import org.springframework.stereotype.Component;
+import java.util.TimeZone;
 
 @Component
 public class MainTest {
-    @Autowired
-    private UserDetailsService userDetailsService;
     public static void main(String[] args) {
-        double v=3.14;
-        System.out.println((long)v);
+        TimeZone timeZone = TimeZone.getTimeZone("Etc/GMT-7");
+
+        Scheduler scheduler = new Scheduler();
+        scheduler.setTimeZone(timeZone);
+        scheduler.schedule("31 16 */1 * * ", () -> System.out.println("khue123"));
+        scheduler.start();
+
     }
 }
-
-@Data
-@AllArgsConstructor
-class Person {
-    private int id;
-    private String name;
-    private int age;
-    private String address;
-
-}
-
-@Data
-class PersonDTO {
-    private int id;
-    private String name;
-    private int age;
-
-    public PersonDTO(Person person) {
-        this.id = person.getId();
-        this.name = person.getName();
-        this.age = person.getAge();
-    }
-}
-
