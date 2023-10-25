@@ -4,17 +4,23 @@ import com.example.springsecurity.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailsService userDetailService;
@@ -42,11 +48,34 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests().antMatchers("/api/public/**").permitAll();
-        http.authorizeRequests().antMatchers("api/user").access("hasAnyRole('ADMIN','USER')");
-        http.authorizeRequests().antMatchers("api/admin").access("hasAnyRole('ADMIN')");
-        http.authorizeRequests().anyRequest().authenticated();
+        // Enable CORS and disable CSRF
+        http = http.cors().and().csrf().disable();
+
+        // Set session management to stateless
+        http = http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and();
+
+        // Set unauthorized requests exception handler
+        http = http
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, ex) -> {
+                            response.sendError(
+                                    HttpServletResponse.SC_UNAUTHORIZED,
+                                    ex.getMessage()
+                            );
+                        }
+                )
+                .and();
+
+        http.authorizeRequests()
+                .antMatchers("/api/public/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/login").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/register").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/test").permitAll()
+                .anyRequest().authenticated();
     }
 
 }

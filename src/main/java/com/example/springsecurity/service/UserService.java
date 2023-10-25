@@ -5,6 +5,7 @@ import com.example.springsecurity.entities.Role;
 import com.example.springsecurity.entities.User;
 import com.example.springsecurity.exception.ExistEmailException;
 import com.example.springsecurity.exception.ExistUsernameException;
+import com.example.springsecurity.reposiroty.RoleRepository;
 import com.example.springsecurity.reposiroty.UserRepository;
 import com.example.springsecurity.utils.ERole;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,8 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
+    private final RoleRepository roleRepository;
+
     public User saveUser(UserDTO userDTO) {
         try {
             if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
@@ -44,8 +47,8 @@ public class UserService {
             user.setUsername(userDTO.getUsername());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             user.setEmail(userDTO.getEmail());
-            Set<Role> roles=Set.of(new Role(ERole.ROLE_USER));
-            user.setRoles(roles);
+            Role role = roleRepository.findByRoleName(ERole.ROLE_USER).orElseThrow(() -> new Exception());
+            user.setRoles(Set.of(role));
             return userRepository.save(user);
         } catch (ExistEmailException e) {
             System.out.println(e.getMessage());
@@ -57,10 +60,8 @@ public class UserService {
         return null;
     }
 
-    public String auth(UserDTO userDTO) {
+    public void auth(UserDTO userDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return "Login successful!";
     }
 }
