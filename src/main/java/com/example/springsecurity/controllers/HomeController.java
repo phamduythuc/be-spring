@@ -1,31 +1,25 @@
 package com.example.springsecurity.controllers;
 
+import com.example.springsecurity.dto.ResponseDTO;
 import com.example.springsecurity.dto.UserDTO;
 import com.example.springsecurity.reposiroty.UserRepository;
 import com.example.springsecurity.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 import java.util.Collections;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
+@RequiredArgsConstructor
 public class HomeController {
-
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
-
     private final UserService userService;
 
-    public HomeController(UserRepository userRepository, RestTemplate restTemplate, UserService userService) {
-        this.userRepository = userRepository;
-        this.restTemplate = restTemplate;
-        this.userService = userService;
-    }
 
     @GetMapping("/public")
     @ResponseBody
@@ -56,9 +50,10 @@ public class HomeController {
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
-    @PostMapping("/register")
+    @GetMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.saveUser(userDTO));
+        userService.saveUser(userDTO);
+        return ResponseEntity.ok(new ResponseDTO<>("success",200));
     }
 
     @PostMapping("/auth")

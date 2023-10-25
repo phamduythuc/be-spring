@@ -21,15 +21,16 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String apiKey = request.getHeader("api-key");
-        if ("khue123".equals(apiKey)){
-            Log log=new Log();
-            log.setTime(new Date());
-            log.setEndpointName(request.getRequestURI());
-            logRepository.save(log);
-            return true;
-        }
-        return false;
+//        String apiKey = request.getHeader("api-key");
+//        if ("khue123".equals(apiKey)){
+//            Log log=new Log();
+//            log.setTime(new Date());
+//            log.setEndpointName(request.getRequestURI());
+//            logRepository.save(log);
+//            return true;
+//        }
+
+        return true;
     }
 
     @Override

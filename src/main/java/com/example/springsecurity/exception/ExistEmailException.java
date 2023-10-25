@@ -15,6 +15,6 @@ public class ExistEmailException extends  RuntimeException{
 
     @Override
     public String getMessage() {
-        return "email already existed !";
+        return " Email already existed !";
     }
 }

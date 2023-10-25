@@ -1,6 +1,6 @@
 package com.example.springsecurity.config;
 
-import com.example.springsecurity.service.UserDetailServiceImpl;
+import com.example.springsecurity.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserDetailServiceImpl userDetailService;
+    private CustomUserDetailsService userDetailService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -43,7 +43,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/", "api/auth", "api/register").permitAll();
         http.authorizeRequests().antMatchers("/api/public/**").permitAll();
         http.authorizeRequests().antMatchers("api/user").access("hasAnyRole('ADMIN','USER')");
         http.authorizeRequests().antMatchers("api/admin").access("hasAnyRole('ADMIN')");
