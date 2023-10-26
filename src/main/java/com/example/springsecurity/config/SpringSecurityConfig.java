@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailsService userDetailService;
@@ -52,10 +51,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http = http.cors().and().csrf().disable();
 
         // Set session management to stateless
-        http = http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
+//        http = http
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and();
 
         // Set unauthorized requests exception handler
         http = http

@@ -30,7 +30,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+
     private final AuthenticationManager authenticationManager;
+
     private final PasswordEncoder passwordEncoder;
 
     private final RoleRepository roleRepository;
@@ -61,7 +63,9 @@ public class UserService {
     }
 
     public void auth(UserDTO userDTO) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println("login: "+SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }
