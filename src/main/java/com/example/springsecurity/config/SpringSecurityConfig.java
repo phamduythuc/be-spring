@@ -42,11 +42,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Enable CORS and disable CSRF
         http = http.cors().and().csrf().disable();
