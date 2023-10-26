@@ -16,5 +16,4 @@ public class JwtUtils {
     @Value("${app.jwtCookie}")
     private String jwtCookie;
 
-
 }
