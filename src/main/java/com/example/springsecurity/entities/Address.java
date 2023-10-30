@@ -1,5 +1,6 @@
 package com.example.springsecurity.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -14,6 +15,8 @@ public class Address {
     private Long addressId;
     private String street;
     private String city;
+
+    @JsonIgnore
     private String zipCode;
 
     @OneToOne(fetch = FetchType.EAGER)

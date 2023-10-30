@@ -26,7 +26,7 @@ public class JwtUtils {
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + jwtExpiration);
         return Jwts.builder()
-                .setSubject(user.getId().toString())
+                .setSubject(user.getUsername().toString())
                 .setExpiration(expireDate)
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
@@ -34,12 +34,12 @@ public class JwtUtils {
     }
 
     //lấy thông tin từ jwt
-    public Long getUserId(String token) {
+    public String getUsername(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-        return Long.parseLong(claims.getSubject());
+        return claims.getSubject();
     }
 
 
