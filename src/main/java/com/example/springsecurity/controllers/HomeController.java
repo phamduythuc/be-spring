@@ -1,22 +1,18 @@
 package com.example.springsecurity.controllers;
 
 import com.example.springsecurity.dto.ResponseDTO;
-import com.example.springsecurity.entities.User;
-import com.example.springsecurity.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class HomeController {
-    private final JwtUtils jwtUtils;
 
     @GetMapping("/admin")
     public ResponseEntity<?> admin() {
