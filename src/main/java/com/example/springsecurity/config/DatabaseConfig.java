@@ -7,12 +7,12 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DatabaseConfig {
-    @Bean
-    public DataSource getDataSource(){
-        DriverManagerDataSource dataSource=new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/test1");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
-        return dataSource;
-    }
+//    @Bean
+//    public DataSource getDataSource(){
+//        DriverManagerDataSource dataSource=new DriverManagerDataSource();
+//        dataSource.setUrl("jdbc:mysql://localhost:3306/test1");
+//        dataSource.setUsername("root");
+//        dataSource.setPassword("root");
+//        return dataSource;
+//    }
 }
