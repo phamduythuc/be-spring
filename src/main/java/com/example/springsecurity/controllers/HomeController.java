@@ -35,4 +35,10 @@ public class HomeController {
     public ResponseEntity<?> edit() {
         return ResponseEntity.ok(new ResponseDTO<>("CAN EDIT", 200));
     }
+
+    @GetMapping("/public")
+    public ResponseEntity<?> publicApi() {
+        return ResponseEntity.ok(new ResponseDTO<>("Hello Khue1234 ", 200));
+    }
+
 }
