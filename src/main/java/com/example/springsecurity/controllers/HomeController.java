@@ -39,15 +39,4 @@ public class HomeController {
     public ResponseEntity<?> edit() {
         return ResponseEntity.ok(new ResponseDTO<>("CAN EDIT", 200));
     }
-
-    @GetMapping("/getToken")
-    @ResponseBody
-    public String getToken() {
-        User user = new User();
-        user.setId(29L);
-        String token = jwtUtils.generateToken(user);
-        System.out.println("User info : " + jwtUtils.getUserId(token));
-        System.out.println("Validate token : " + jwtUtils.validateToken(token));
-        return token;
-    }
 }

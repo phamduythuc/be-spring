@@ -8,6 +8,7 @@ import com.example.springsecurity.exception.ExistUsernameException;
 import com.example.springsecurity.reposiroty.RoleRepository;
 import com.example.springsecurity.reposiroty.UserRepository;
 import com.example.springsecurity.utils.ERole;
+import com.example.springsecurity.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -36,6 +38,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final RoleRepository roleRepository;
+
+    private final JwtUtils jwtUtils;
+
 
     public User saveUser(UserDTO userDTO) {
         try {
@@ -62,10 +67,12 @@ public class UserService {
         return null;
     }
 
-    public void auth(UserDTO userDTO) {
+    public String auth(UserDTO userDTO) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("login: "+SecurityContextHolder.getContext().getAuthentication().getName());
+        System.out.println("login: " + SecurityContextHolder.getContext().getAuthentication().getName());
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return jwtUtils.generateToken(userDetails.getUsername());
     }
 }

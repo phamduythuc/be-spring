@@ -22,11 +22,11 @@ public class JwtUtils {
     private String jwtCookie;
 
     // tạo thông tin từ user
-    public String generateToken(User user) {
+    public String generateToken(String username) {
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + jwtExpiration);
         return Jwts.builder()
-                .setSubject(user.getUsername().toString())
+                .setSubject(username)
                 .setExpiration(expireDate)
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
