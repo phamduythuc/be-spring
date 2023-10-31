@@ -25,8 +25,8 @@ public class AuthController {
         return ResponseEntity.ok(new ResponseDTO<>(userService.auth(userDTO), 200));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
+    @PostMapping("/auth/refresh-token")
+    public ResponseEntity<?> refreshToken() {
         return ResponseEntity.ok(new ResponseDTO<>("Test OK", 200));
     }
 }
