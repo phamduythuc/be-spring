@@ -2,7 +2,6 @@ package com.example.springsecurity.utils;
 
 import com.example.springsecurity.entities.Role;
 import com.example.springsecurity.entities.User;
-import com.example.springsecurity.reposiroty.RoleRepository;
 import com.example.springsecurity.reposiroty.UserRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,16 +17,14 @@ public class Database implements ApplicationRunner {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
 
-    public Database(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public Database(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         Role roleAdmin = new Role();
         Role roleUser = new Role();
         roleAdmin.setRoleName(ERole.ROLE_ADMIN);
