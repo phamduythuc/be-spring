@@ -14,12 +14,12 @@ public class JwtUtils {
 
     @Value("${app.jwtSecret}")
     private String jwtSecret;
-
     @Value(value = "${app.jwtExpiration}")
     private Long jwtExpiration;
-
     @Value("${app.jwtCookie}")
     private String jwtCookie;
+    @Value("${app.jwtRefreshExpiration}")
+    private Long jwtRefreshExpiration;
 
     // tạo thông tin từ user
     public String generateToken(String username) {

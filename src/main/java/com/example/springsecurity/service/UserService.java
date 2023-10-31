@@ -11,6 +11,8 @@ import com.example.springsecurity.utils.ERole;
 import com.example.springsecurity.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Set;
 
 @Service
@@ -40,6 +43,7 @@ public class UserService {
     private final RoleRepository roleRepository;
 
     private final JwtUtils jwtUtils;
+    private final JavaMailSender javaMailSender;
 
 
     public User saveUser(UserDTO userDTO) {
@@ -68,11 +72,21 @@ public class UserService {
     }
 
     public String auth(UserDTO userDTO) {
+        byte[] bytePassword = Base64.getDecoder().decode(userDTO.getPassword());
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), new String(bytePassword)));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         System.out.println("login: " + SecurityContextHolder.getContext().getAuthentication().getName());
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return jwtUtils.generateToken(userDetails.getUsername());
+    }
+
+    private void sendEmail(String to, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("songkhecole@gmail.com");
+        message.setSubject(subject);
+        message.setText(text);
+        message.setTo(to);
+        javaMailSender.send(message);
     }
 }
