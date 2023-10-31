@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             if (token != null && jwtUtils.validateToken(token)) {
                 String userName = jwtUtils.getUsername(token);
-                Optional<User> optionalUser = userRepository.findByUsername(userName);
+                Optional<User> optionalUser = userRepository.findByEmail(userName);
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
                 Set<GrantedAuthority> authorities = optionalUser.get()
                         .getRoles()

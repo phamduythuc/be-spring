@@ -12,4 +12,10 @@ public class ResponseDTO<T> {
         this.message = message;
         this.status = status;
     }
+
+    public ResponseDTO(String message, int status, T data) {
+        this.message = message;
+        this.status = status;
+        this.data = data;
+    }
 }

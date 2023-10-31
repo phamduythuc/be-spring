@@ -3,9 +3,12 @@ package com.example.springsecurity.controllers;
 import com.example.springsecurity.dto.ResponseDTO;
 import com.example.springsecurity.dto.UserDTO;
 import com.example.springsecurity.service.UserService;
+import com.example.springsecurity.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api")
@@ -28,5 +31,10 @@ public class AuthController {
     @PostMapping("/auth/refresh-token")
     public ResponseEntity<?> refreshToken() {
         return ResponseEntity.ok(new ResponseDTO<>("Test OK", 200));
+    }
+
+    @GetMapping("/user-info")
+    public ResponseEntity<?> userInfo(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(new ResponseDTO<>("Success", 200, userService.userInfo(token)));
     }
 }

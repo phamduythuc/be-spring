@@ -33,19 +33,16 @@ public class Database implements ApplicationRunner {
         roleAdmin.setRoleName(ERole.ROLE_ADMIN);
         roleUser.setRoleName(ERole.ROLE_USER);
         User admin = new User();
-        admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setEmail("admin@gmail.com");
-        admin.setRoles(Set.of(roleAdmin));
+        admin.setRoles(Set.of(roleAdmin, roleUser));
 
         User user1 = new User();
-        user1.setUsername("user1");
         user1.setPassword(passwordEncoder.encode("user1"));
         user1.setEmail("user1@gmail.com");
         user1.setRoles(Set.of(roleUser));
 
         User user2 = new User();
-        user2.setUsername("user2");
         user2.setPassword(passwordEncoder.encode("user2"));
         user2.setEmail("user2@gmail.com");
         user2.setRoles(Set.of(roleUser));
